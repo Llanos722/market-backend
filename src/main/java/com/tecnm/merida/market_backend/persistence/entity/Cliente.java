@@ -2,10 +2,10 @@ package com.tecnm.merida.market_backend.persistence.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 
-
-    @Entity
+@Entity
     @Table (name="clientes")
     public class Cliente {
 
@@ -18,6 +18,9 @@ import java.io.Serializable;
 
         @Column (name ="correo_electronico")
         private String correoElectronico;
+
+        @OneToMany (mappedBy  = "cliente")
+        private List<Compra> compras;
 
         public Integer getId() {
             return id;
