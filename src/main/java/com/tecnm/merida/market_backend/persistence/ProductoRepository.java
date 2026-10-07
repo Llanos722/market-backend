@@ -4,13 +4,30 @@ import com.tecnm.merida.market_backend.persistence.crud.ProductoCrudRepository;
 import com.tecnm.merida.market_backend.persistence.entity.Producto;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductoRepository {
 
     private ProductoCrudRepository productoCrudRepository;
     //select * from productos
-    public List<Producto> getAll( ) {return (List<Producto>) ProductoCrudRepository.findAll();
+    public List<Producto> getAll( ) {
+        return (List<Producto>) productoCrudRepository.findAll();
     }
-    //vamos a caastear
+    public List<Producto> getByCategory(int idCategoria) {
+        return productoCrudRepository.findByIdCategoriaOrderByNombreAsc(idCategoria);
+    }
+    public Optional<List<Producto>> getEscasos(int cantidad){
+        return productoCrudRepository.findByCantidadStockLessThenAndEstado(cantidad, true);
+    }
+    public Optional<Producto> getProducto(int idProducto){
+        return  productoCrudRepository.findById(idProducto);
+    }
 
+    public Producto save(Producto producto){
+        return productoCrudRepository.save(producto);
+
+    }
+    public void delete(int idProducto){
+        productoCrudRepository.deleteById(idProducto);
+    }
 }

@@ -66,8 +66,19 @@ import java.util.List;
             return correoElectronico;
         }
 
-        public void setCorreoElectronico(String correoElectronico) {
+    public List<Compra> getCompras() {
+        return compras;
+    }
+
+    public void setCompras(List<Compra> compras) {
+        this.compras = compras;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
             this.correoElectronico = correoElectronico;
+
+
+
         }
     }
 
