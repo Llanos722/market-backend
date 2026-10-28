@@ -2,8 +2,8 @@ package com.tecnm.merida.market_backend.domain;
 
 public class Product {
     private Integer productId;
-    private String productName;
-    private int categoryId;
+    private String name;
+    private Integer categoryId;
     private double price;
     private int stock;
     private boolean active;
@@ -17,19 +17,19 @@ public class Product {
         this.productId = productId;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String productName) {
+        this.name = productName;
     }
 
-    public int getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 

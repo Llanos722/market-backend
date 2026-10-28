@@ -1,0 +1,30 @@
+
+package com.tecnm.merida.market_backend.persistence.mapper;
+
+import com.tecnm.merida.market_backend.domain.Purchase;
+import com.tecnm.merida.market_backend.persistence.entity.Compra;
+
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
+
+@Mapper(componentModel = "spring", uses = {PurchaseItemMapper.class})
+public interface PurchaseMapper {
+
+    @Mapping(source = "idCompra", target = "purchaseId")
+    @Mapping(source = "idCliente", target = "clientId")
+    @Mapping(source = "fecha", target = "date")
+    @Mapping(source = "medioPago", target = "paymentMethod")
+    @Mapping(source = "comentario", target = "comment")
+    @Mapping(source = "estado", target = "state")
+    @Mapping(source = "productos", target = "items")
+    Purchase toPurchase(Compra compra);
+
+    List<Purchase> toPurchases(List<Compra> compras);
+
+    @InheritInverseConfiguration(name = "toPurchase")
+    @Mapping(target = "cliente", ignore = true)
+    Compra toCompra(Purchase purchase);
+}
