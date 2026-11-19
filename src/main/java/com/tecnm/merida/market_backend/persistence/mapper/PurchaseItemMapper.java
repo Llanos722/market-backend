@@ -12,6 +12,13 @@ import org.mapstruct.Mappings;
 @Mapper (componentModel = "spring", uses = {ProductMapper.class})
 public interface PurchaseItemMapper {
 
+    @Mapping(source = "idProducto", target = "id.idProducto")
+    @Mapping(target = "id.idCompra", ignore = true)
+    @Mapping(target = "compra", ignore = true)
+    @Mapping(target = "producto", ignore = true)
+    @Mapping(target = "estado", constant = "true")
+    CompraProducto toCompraProducto(com.tecnm.merida.market_backend.web.dto.PurchaseRequest.Item item);
+
     @Mappings({
             @Mapping(source = "id.idProducto", target = "productId"),
             @Mapping(source = "cantidad", target= "quantity"),

@@ -13,6 +13,13 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {PurchaseItemMapper.class})
 public interface PurchaseMapper {
 
+    @Mapping(target = "idCompra", ignore = true)
+    @Mapping(target = "cliente", ignore = true)
+    @Mapping(target = "fecha", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "estado", constant = "P")
+    @Mapping(source = "productosAdquiridos", target = "productos")
+    Compra toCompra(com.tecnm.merida.market_backend.web.dto.PurchaseRequest request);
+
     @Mapping(source = "idCompra", target = "purchaseId")
     @Mapping(source = "idCliente", target = "clientId")
     @Mapping(source = "fecha", target = "date")

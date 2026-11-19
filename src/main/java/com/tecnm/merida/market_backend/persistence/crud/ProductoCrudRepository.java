@@ -8,7 +8,11 @@ import java.util.Optional;
 
 // metodos abstractos que despues se implementaras
 
-public interface ProductoCrudRepository extends CrudRepository<Producto, Integer> {
+public interface ProductoCrudRepository extends org.springframework.data.jpa.repository.JpaRepository<Producto, Integer> {
+
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @org.springframework.data.jpa.repository.Query("select p from Producto p where p.idProducto = :id")
+    Optional<Producto> findForPurchase(@org.springframework.data.repository.query.Param("id") int id);
 
     /* SQL Query
     * SELECT *

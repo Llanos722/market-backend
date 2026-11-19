@@ -10,10 +10,11 @@ import java.util.List;
     public class Cliente {
 
         @Id
-        private Integer id;
+        private String id;
         private String nombre;
+        @Column(name = "apellidos")
         private String apellido;
-        private String celular;
+        private java.math.BigDecimal celular;
         private String  direccion;
 
         @Column (name ="correo_electronico")
@@ -22,11 +23,11 @@ import java.util.List;
         @OneToMany (mappedBy  = "cliente")
         private List<Compra> compras;
 
-        public Integer getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(String id) {
             this.id = id;
         }
 
@@ -46,11 +47,11 @@ import java.util.List;
             this.apellido = apellido;
         }
 
-        public String getCelular() {
+        public java.math.BigDecimal getCelular() {
             return celular;
         }
 
-        public void setCelular(String celular) {
+        public void setCelular(java.math.BigDecimal celular) {
             this.celular = celular;
         }
 
