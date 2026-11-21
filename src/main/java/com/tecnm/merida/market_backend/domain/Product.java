@@ -2,6 +2,9 @@ package com.tecnm.merida.market_backend.domain;
 
 public class Product {
     private Integer productId;
+    private String barcode;
+    public String getBarcode() { return barcode; }
+    public void setBarcode(String barcode) { this.barcode = barcode; }
     private String name;
     private Integer categoryId;
     private double price;

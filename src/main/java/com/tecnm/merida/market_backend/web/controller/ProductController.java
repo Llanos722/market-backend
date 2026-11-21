@@ -133,6 +133,11 @@ public class ProductController {
         );
     }
 
+    @PutMapping("/{id}")
+    public Product update(@PathVariable("id") int id, @RequestBody Product product) {
+        return productService.update(id, product);
+    }
+
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Delete a product by ID",

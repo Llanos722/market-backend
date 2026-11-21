@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Table (name = "compras_productos")
 public class CompraProducto {
 
-    //Viene de otra clase
     @EmbeddedId
     private CompraProductoPK id;
     private Integer cantidad;
@@ -16,7 +15,8 @@ public class CompraProducto {
     private Boolean estado;
 
     @ManyToOne
-    @JoinColumn(name = "id_compra",  insertable = false, updatable = false)
+    @MapsId("idCompra")
+    @JoinColumn(name = "id_compra")
     private Compra compra;
 
     @ManyToOne
