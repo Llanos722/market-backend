@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Table (name = "compras_productos")
 public class CompraProducto {
 
-    //Viene de otra clase
     @EmbeddedId
     private CompraProductoPK id;
     private Integer cantidad;

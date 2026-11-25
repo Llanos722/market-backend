@@ -34,7 +34,6 @@ public class Producto {
     @JoinColumn( name = "id_categoria", insertable = false, updatable = false)
     private Categoria categoria;
 
-    //Ojito
     @OneToMany (mappedBy = "producto")
     private List<CompraProducto> compraProductos;
 

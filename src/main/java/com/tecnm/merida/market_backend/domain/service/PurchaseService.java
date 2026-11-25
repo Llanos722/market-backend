@@ -17,16 +17,13 @@ public class PurchaseService {
     private final PurchaseRepository purchases;
     private final ProductoCrudRepository products;
     private final ClienteCrudRepository clients;
-    private final CompraCrudRepository compraRepository;
     private final PurchaseMapper mapper;
 
     public PurchaseService(PurchaseRepository purchases, ProductoCrudRepository products,
-                           ClienteCrudRepository clients, CompraCrudRepository compraRepository,
-                           PurchaseMapper mapper) {
+                           ClienteCrudRepository clients, PurchaseMapper mapper) {
         this.purchases = purchases;
         this.products = products;
         this.clients = clients;
-        this.compraRepository = compraRepository;
         this.mapper = mapper;
     }
 
@@ -55,10 +52,8 @@ public class PurchaseService {
             if (!ids.add(item.idProducto())) throw bad("No repitas un producto en la compra");
         }
 
-        // MapStruct convierte el maestro y toda su lista de detalles.
         var compra = mapper.toCompra(request);
         compra.setMedioPago(payment);
-        compra.getProductos().forEach(detail -> detail.setCompra(compra));
 
         // Orden estable para evitar bloqueos cruzados entre compras concurrentes.
         for (var detail : compra.getProductos().stream()
@@ -80,8 +75,7 @@ public class PurchaseService {
             products.saveAndFlush(product);
         }
 
-        // Un solo save inserta la cabecera y sus detalles mediante CascadeType.ALL.
-        return mapper.toPurchase(compraRepository.save(compra));
+        return purchases.save(mapper.toPurchase(compra));
     }
 
     private String paymentCode(String value) {
