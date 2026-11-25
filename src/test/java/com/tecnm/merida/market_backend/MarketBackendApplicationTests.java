@@ -5,9 +5,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import io.jsonwebtoken.Jwts;
 import tools.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.net.http.*;
+import java.util.Base64;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, properties={
@@ -16,12 +21,18 @@ import static org.junit.jupiter.api.Assertions.*;
  "spring.datasource.driver-class-name=org.h2.Driver", "spring.jpa.hibernate.ddl-auto=create-drop"
 })
 class MarketBackendApplicationTests {
+ private static final String SECRET=Base64.getEncoder().encodeToString(Jwts.SIG.HS256.key().build().getEncoded());
+ @DynamicPropertySource
+ static void jwtProperties(DynamicPropertyRegistry registry) { registry.add("jwt.secret", () -> SECRET); }
  @LocalServerPort int port;
  @Autowired JdbcTemplate jdbc;
+ @Autowired PasswordEncoder passwordEncoder;
+ private String token;
  private final HttpClient http=HttpClient.newHttpClient();
  private final ObjectMapper json=new ObjectMapper();
  private HttpResponse<String> request(String method,String path,String body) throws Exception {
   var builder=HttpRequest.newBuilder(URI.create("http://localhost:"+port+path)).header("Content-Type","application/json");
+  if(token != null) builder.header("Authorization","Bearer "+token);
   return http.send(builder.method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body)).build(),HttpResponse.BodyHandlers.ofString());
  }
  private int create(String path,String body,String id) throws Exception {
@@ -29,6 +40,10 @@ class MarketBackendApplicationTests {
   return json.readTree(result.body()).get(id).asInt();
  }
  @Test void crudCascadeAndRealRollback() throws Exception {
+  jdbc.update("insert into clientes(id, password) values (?, ?)","crud-test",passwordEncoder.encode("1234"));
+  var login=request("POST","/auth/login","{\"idCliente\":\"crud-test\",\"password\":\"1234\"}");
+  assertEquals(200,login.statusCode(),login.body());
+  token=json.readTree(login.body()).get("token").asText();
   assertEquals(200,request("GET","/products",null).statusCode());
   int category=create("/categories","{\"category\":\"Pruebas\",\"active\":true}","categoryId");
   String categoryPath="/categories/"+category;

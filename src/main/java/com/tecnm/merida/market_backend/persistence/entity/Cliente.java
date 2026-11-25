@@ -1,4 +1,5 @@
 package com.tecnm.merida.market_backend.persistence.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -20,11 +21,23 @@ import java.util.List;
         @Column (name ="correo_electronico")
         private String correoElectronico;
 
+        @JsonIgnore
+        @Column(length = 60)
+        private String password;
+
         @OneToMany (mappedBy  = "cliente")
         private List<Compra> compras;
 
         public String getId() {
             return id;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
 
         public void setId(String id) {

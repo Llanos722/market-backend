@@ -10,8 +10,10 @@ public interface ClientMapper {
  @Mapping(source="celular",target="phone")
  @Mapping(source="direccion",target="address")
  @Mapping(source="correoElectronico",target="email")
+ @Mapping(target="password",ignore=true)
  Client toClient(Cliente entity);
  @InheritInverseConfiguration
  @Mapping(target="compras",ignore=true)
+ @Mapping(target="password",ignore=true)
  Cliente toCliente(Client client);
 }
